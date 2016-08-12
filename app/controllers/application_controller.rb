@@ -2,6 +2,10 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   def index
-    render :text => 'Konichiva ... d(^_^)b'
+    if user_signed_in?
+      render :text => "Konichiva <i>#{current_user.email}</i>!<br /> <a href='/users/sign_out'>Logout</a>"
+     else
+      render :text => "Konichiva <i>d(^_^)b</i> <br /> <a href='/users/sign_in'>Sign In</a>"
+    end
   end
 end
