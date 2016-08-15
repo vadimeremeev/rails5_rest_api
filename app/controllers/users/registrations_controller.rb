@@ -18,6 +18,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
           email: params[:user][:email],
           password: params[:user][:password],
           password_confirmation: params[:user][:password_confirmation],
+          name: params[:user][:name],
           is_admin: params[:user][:is_admin]
         )
         @user.save
