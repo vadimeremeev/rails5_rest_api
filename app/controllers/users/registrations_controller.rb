@@ -14,9 +14,15 @@ class Users::RegistrationsController < Devise::RegistrationsController
     respond_to do |format|
       format.html { super }
       format.json {
-        @user = User.new(:email => params[:user][:email], :password => params[:user][:password], :password_confirmation => params[:user][:password_confirmation])
+        @user = User.new(
+          email: params[:user][:email],
+          password: params[:user][:password],
+          password_confirmation: params[:user][:password_confirmation],
+          is_admin: params[:user][:is_admin]
+        )
         @user.save
-        render json: {success: true}
+        sign_in @user
+        render json: {success: true, user: @user}
       }
     end
   end
