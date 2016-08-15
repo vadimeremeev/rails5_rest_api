@@ -14,16 +14,20 @@ class Users::RegistrationsController < Devise::RegistrationsController
     respond_to do |format|
       format.html { super }
       format.json {
-        @user = User.new(
-          email: params[:user][:email],
-          password: params[:user][:password],
-          password_confirmation: params[:user][:password_confirmation],
-          name: params[:user][:name],
-          is_admin: params[:user][:is_admin]
-        )
-        @user.save
-        sign_in @user
-        render json: {success: true, user: @user}
+        unless User.where(email: params[:user][:email]).exists?
+          @user = User.new(
+            email: params[:user][:email],
+            password: params[:user][:password],
+            password_confirmation: params[:user][:password_confirmation],
+            name: params[:user][:name],
+            is_admin: params[:user][:is_admin]
+          )
+          @user.save
+          sign_in @user
+          render json: {success: true, user: @user}
+        else
+          render json: {success: false, code: 'User already Exists'}, status: :unprocessable_entity
+        end
       }
     end
   end
