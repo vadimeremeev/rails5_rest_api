@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160815120154) do
+ActiveRecord::Schema.define(version: 20160816110959) do
 
   create_table "timezones", force: :cascade do |t|
     t.string   "name"
@@ -18,6 +18,8 @@ ActiveRecord::Schema.define(version: 20160815120154) do
     t.integer  "gmt_offset"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer  "user_id"
+    t.index ["user_id"], name: "index_timezones_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
