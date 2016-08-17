@@ -7,7 +7,9 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      resources :timezones
+      resources :timezones do
+        get 'search' => 'timezones#search', on: :collection
+      end
     end
   end
 

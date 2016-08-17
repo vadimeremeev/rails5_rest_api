@@ -35,6 +35,11 @@ class Api::V1::TimezonesController < Api::V1::ApplicationController
     @timezone.destroy
   end
 
+  def search
+    @timezones = Timezone.filtered_by_user(current_user).search(params[:q])
+    render :index
+  end
+
   private
     def set_user
       params[:timezone][:user_id] = current_user.id if current_user.present?
