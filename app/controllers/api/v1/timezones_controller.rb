@@ -1,11 +1,11 @@
 class Api::V1::TimezonesController < Api::V1::ApplicationController
 
-  before_filter :set_timezone, only: [:show, :update, :destroy]
-  before_filter :set_user, only: [:create, :update]
+  before_action :set_timezone, only: [:show, :update, :destroy]
+  before_action :set_user, only: [:create, :update]
 
   #GET /api/v1/timezones
   def index
-    @timezones = Timezone.all
+    @timezones = Timezone.filtered_by_user(current_user)
   end
 
   #GET /api/v1/timezones/:id
@@ -41,7 +41,13 @@ class Api::V1::TimezonesController < Api::V1::ApplicationController
     end
 
     def set_timezone
-      @timezone = Timezone.find(params[:id])
+      @timezone = Timezone.find_by_id(params[:id])
+      unless @timezone.present?
+        render json: { message: 'Record Do Not Exists' }, status: 404
+      end
+      unless current_user.is_admin? || (@timezone.user_id == current_user.id)
+        render json: { message: 'Access Error' }, status: 422
+      end
     end
 
     def timezone_params

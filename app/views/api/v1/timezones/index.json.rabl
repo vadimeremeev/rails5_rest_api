@@ -8,7 +8,8 @@ end
 
 node (:current_user) do
   {
-    :id => current_user.id,
-    :email => current_user.email
+    id: current_user.id,
+    email: current_user.email,
+    admin: current_user.is_admin
   }
 end

@@ -1,5 +1,8 @@
 class Timezone < ApplicationRecord
   belongs_to :user
 
-  delegate :email, :to => :user, :allow_nil => true
+  delegate :email, to: :user, allow_nil: true
+  delegate :is_admin, to: :user, allow_nil: true
+
+  scope :filtered_by_user, ->(user) { where(user_id: user.id) unless user.is_admin }
 end
