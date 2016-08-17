@@ -52,10 +52,10 @@ class Api::V1::TimezonesController < Api::V1::ApplicationController
     def set_timezone
       @timezone = Timezone.find_by_id(params[:id])
       unless @timezone.present?
-        render json: { message: 'Record Do Not Exists' }, status: 404
+        render json: { success: false, code: 'Record Do Not Exists' }, status: 404
       end
       unless current_user.is_admin? || (@timezone.user_id == current_user.id)
-        render json: { message: 'Access Error' }, status: 422
+        render json: { success: false, code: 'Access Error' }, status: 422
       end
     end
 

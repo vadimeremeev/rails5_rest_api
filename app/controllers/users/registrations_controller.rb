@@ -1,6 +1,7 @@
 class Users::RegistrationsController < Devise::RegistrationsController
   before_action :configure_sign_up_params, only: [:create]
   before_action :configure_account_update_params, only: [:update]
+  before_action :set_user, only: [:update, :destroy]
 
   respond_to :html, :json
 
@@ -33,18 +34,22 @@ class Users::RegistrationsController < Devise::RegistrationsController
   end
 
   # GET /resource/edit
-  def edit
-    respond_to do |format|
-      format.html { super }
-      format.json { render json: {success: true} }
-    end
-  end
+  # def edit
+  #   super
+  # end
 
   # PUT /resource
   def update
     respond_to do |format|
       format.html { super }
-      format.json { render json: {success: true} }
+      format.json {
+        if @user.update(user_params)
+          sign_in @user
+          render json: {success: true, user: @user}
+        else
+          render json: {success: false, code: 'User already Exists'}, status: :unprocessable_entity
+        end
+      }
     end
   end
 
@@ -52,7 +57,10 @@ class Users::RegistrationsController < Devise::RegistrationsController
   def destroy
     respond_to do |format|
       format.html { super }
-      format.json { render json: {sucess: true} }
+      format.json {
+        @timezone.destroy
+        render json: {sucess: true}
+      }
     end
   end
 
@@ -65,7 +73,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   #   super
   # end
 
-  # protected
+  protected
 
   # If you have extra params to permit, append them to the sanitizer.
   def configure_sign_up_params
@@ -75,6 +83,14 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # If you have extra params to permit, append them to the sanitizer.
   def configure_account_update_params
     devise_parameter_sanitizer.permit(:account_update, keys: [:attribute])
+  end
+
+  def user_params
+    params.require(:user).permit(:name, :email, :password, :password_confirmation, :is_admin)
+  end
+
+  def set_user
+    @user = User.where(id: params[:user][:id])
   end
 
   # The path used after sign up.
