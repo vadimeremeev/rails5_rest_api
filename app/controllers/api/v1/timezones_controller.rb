@@ -13,6 +13,7 @@ class Api::V1::TimezonesController < Api::V1::ApplicationController
     @timezone
   end
 
+  #POST /api/v1/timezones
   def create
     @timezone = Timezone.new(timezone_params)
 
@@ -23,6 +24,7 @@ class Api::V1::TimezonesController < Api::V1::ApplicationController
     end
   end
 
+  #PUT /api/v1/timezones/:id
   def update
     if @timezone.update(timezone_params)
       render :show
@@ -31,10 +33,12 @@ class Api::V1::TimezonesController < Api::V1::ApplicationController
     end
   end
 
+  #DELETE /api/v1/timezones/:id
   def destroy
     @timezone.destroy
   end
 
+  #GET /api/v1/timezones/search/:q
   def search
     @timezones = Timezone.filtered_by_user(current_user).search(params[:q])
     render :index
