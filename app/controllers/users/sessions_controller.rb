@@ -13,7 +13,11 @@ class Users::SessionsController < Devise::SessionsController
     respond_to do |format|
       format.html { super }
       format.json {
-        render json: {success: true, user: current_user}
+        if current_user.present?
+          render json: {success: true, user: current_user}
+        else
+          render json: {success: false, code: 'Wrong Credentials'}, status: :unprocessable_entity
+        end
       }
     end
   end
