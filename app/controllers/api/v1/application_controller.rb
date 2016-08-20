@@ -1,9 +1,7 @@
 class Api::V1::ApplicationController < ApplicationController
-  respond_to :html, :json
+  before_action :default_format
 
-  acts_as_token_authentication_handler_for User
-
-  before_filter :default_format
+  respond_to :json
 
   private
 

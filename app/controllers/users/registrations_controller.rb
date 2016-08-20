@@ -3,8 +3,6 @@ class Users::RegistrationsController < Devise::RegistrationsController
   before_action :configure_account_update_params, only: [:update]
   before_action :set_user, only: [:update, :destroy]
 
-  acts_as_token_authentication_handler_for User
-
   respond_to :html, :json
 
   # GET /resource/sign_up
