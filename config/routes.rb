@@ -10,7 +10,9 @@ Rails.application.routes.draw do
       resources :timezones do
         get 'search' => 'timezones#search', on: :collection
       end
-      resources :users
+      resources :users do
+        get 'logout' => 'users#logout', on: :collection
+      end
     end
   end
 

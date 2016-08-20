@@ -1,5 +1,15 @@
 class Api::V1::UsersController < Api::V1::ApplicationController
-  before_action :set_user, only: [:update, :destroy]
+  before_action :set_user
+
+  #GET /api/v1/users
+  def index
+    @users = User.all
+  end
+
+  #GET /api/v1/users/:id
+  def show
+    @user
+  end
 
   #PUT /api/v1/users/:id
   def update
@@ -10,10 +20,19 @@ class Api::V1::UsersController < Api::V1::ApplicationController
     end
   end
 
-  #DELETE /api/v1/users/destroy:id
+  #GET /api/v1/users/logout
+  def logout
+    sign_out @user
+    if current_user.nil?
+      render json: {status: true}
+    else
+      render json: {status: false, message: "Error happen during logging out"}, status: unprocessable_entity
+    end
+  end
+
+  #DELETE /api/v1/users/:id
   def destroy
-    @user.authentication_token = nil
-    if @user.save
+    if @user.destroy
       render json: {status: true}
     else
       render json: @user.errors, status: unprocessable_entity
