@@ -47,7 +47,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
           sign_in @user
           render json: {success: true, user: @user}
         else
-          render json: {success: false, code: 'User already Exists'}, status: :unprocessable_entity
+          render json: {success: false, code: "Can't update user account #{@user.inspect}"}, status: :unprocessable_entity
         end
       }
     end
@@ -90,7 +90,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   end
 
   def set_user
-    @user = User.where(id: params[:user][:id])
+    @user = current_user || User.where(id: params[:user][:id])
   end
 
   # The path used after sign up.
