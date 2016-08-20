@@ -3,6 +3,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
   before_action :configure_account_update_params, only: [:update]
   before_action :set_user, only: [:update, :destroy]
 
+  acts_as_token_authentication_handler_for User
+
   respond_to :html, :json
 
   # GET /resource/sign_up
@@ -44,10 +46,10 @@ class Users::RegistrationsController < Devise::RegistrationsController
       format.html { super }
       format.json {
         if @user.update(user_params)
-          sign_in @user
+          sign_in @user, :bypass => true
           render json: {success: true, user: @user}
         else
-          render json: {success: false, code: "Can't update user account #{@user.inspect}"}, status: :unprocessable_entity
+          render json: {success: false, code: "Can't update user account"}, status: :unprocessable_entity
         end
       }
     end
