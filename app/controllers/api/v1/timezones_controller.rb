@@ -40,7 +40,7 @@ class Api::V1::TimezonesController < Api::V1::ApplicationController
 
   #GET /api/v1/timezones/search/:q
   def search
-    @timezones = Timezone.filtered_by_user(current_user).search(params[:q])
+    @timezones = Timezone.filtered_by_user(current_user).search(params[:q]).page(params[:page]).per(params[:size])
     render :index
   end
 

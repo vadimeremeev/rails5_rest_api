@@ -1,11 +1,17 @@
 class Api::V1::UsersController < Api::V1::ApplicationController
   before_action :set_user
-  before_action :authorize_admin, only: [:index]
+  before_action :authorize_admin, only: [:index, :search]
   before_action :authorize_user, only: [:show, :update, :logout, :destroy]
 
   #GET /api/v1/users
   def index
     @users = User.all.page(params[:page]).per(params[:size])
+  end
+
+  #GET /api/v1/users/search/:q
+  def search
+    @timezones = User.search(params[:q]).page(params[:page]).per(params[:size])
+    render :index
   end
 
   #GET /api/v1/users/:id
@@ -40,7 +46,6 @@ class Api::V1::UsersController < Api::V1::ApplicationController
       render json: @user.errors, status: unprocessable_entity
     end
   end
-
 
   private
 

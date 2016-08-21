@@ -12,6 +12,7 @@ Rails.application.routes.draw do
       end
       resources :users do
         get 'logout' => 'users#logout', on: :collection
+        get 'search' => 'users#search', on: :collection
       end
     end
   end
