@@ -10,7 +10,7 @@ class Api::V1::UsersController < Api::V1::ApplicationController
 
   #GET /api/v1/users/search/:q
   def search
-    @timezones = User.search(params[:q]).page(params[:page]).per(params[:size])
+    @users = User.search(params[:q]).page(params[:page]).per(params[:size])
     render :index
   end
 
