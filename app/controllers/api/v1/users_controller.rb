@@ -1,5 +1,7 @@
 class Api::V1::UsersController < Api::V1::ApplicationController
   before_action :set_user
+  before_action :authorize_admin, only: [:index]
+  before_action :authorize_user, only: [:show, :update, :logout, :destroy]
 
   #GET /api/v1/users
   def index
@@ -43,17 +45,26 @@ class Api::V1::UsersController < Api::V1::ApplicationController
   private
 
   def set_user
-    @user = current_user || User.where(id: params[:user][:id])
+    @user = User.where(id: params[:id]).first || current_user
     unless @user.present?
       render json: { success: false, code: 'Record Do Not Exists' }, status: 404
-    end
-    unless current_user.is_admin? || (@user.user_id == current_user.id)
-      render json: { success: false, code: 'Access Error' }, status: 422
     end
   end
 
   def user_params
     params.require(:user).permit(:name, :email, :password, :password_confirmation, :is_admin)
+  end
+
+  def authorize_admin
+    unless current_user.is_admin?
+      render json: { success: false, code: 'Access Error' }, status: 422
+    end
+  end
+
+  def authorize_user
+    unless current_user.is_admin? || (@user.id == current_user.id)
+      render json: { success: false, code: 'Access Error' }, status: 422
+    end
   end
 
 end
