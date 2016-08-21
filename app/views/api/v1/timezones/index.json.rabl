@@ -13,3 +13,8 @@ node (:current_user) do
     admin: current_user.try(:is_admin)
   }
 end
+
+node (:total_pages) { @timezones.try(:total_pages) || 0 }
+node (:current_page) { @timezones.try(:current_page) || 1 }
+node (:per_page) { (params[:size] || 10).to_i }
+node (:total_results) { @timezones.try(:total_count)|| 0 }

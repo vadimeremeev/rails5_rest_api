@@ -3,7 +3,7 @@ class Api::V1::UsersController < Api::V1::ApplicationController
 
   #GET /api/v1/users
   def index
-    @users = User.all
+    @users = User.all.page(params[:page]).per(params[:size])
   end
 
   #GET /api/v1/users/:id

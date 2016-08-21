@@ -5,7 +5,7 @@ class Api::V1::TimezonesController < Api::V1::ApplicationController
 
   #GET /api/v1/timezones
   def index
-    @timezones = Timezone.filtered_by_user(current_user)
+    @timezones = Timezone.filtered_by_user(current_user).page(params[:page]).per(params[:size])
   end
 
   #GET /api/v1/timezones/:id
