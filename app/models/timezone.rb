@@ -7,4 +7,6 @@ class Timezone < ApplicationRecord
   scope :filtered_by_user, ->(user) { where(user_id: user.try(:id)) unless user.try(:is_admin) }
 
   scope :search, ->(q) { where("LOWER(name) LIKE :q OR LOWER(city) LIKE :q", q: "%#{q.to_s.downcase}%") }
+
+  default_scope { order("id DESC")}
 end

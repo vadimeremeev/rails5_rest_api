@@ -24,7 +24,7 @@ class Api::V1::UsersController < Api::V1::ApplicationController
     if @user.update(user_params)
       render json: @user
     else
-      render json: @user.errors, status: unprocessable_entity
+      render json: @user.errors, status: 422
     end
   end
 
@@ -34,7 +34,7 @@ class Api::V1::UsersController < Api::V1::ApplicationController
     if current_user.nil?
       render json: {status: true}
     else
-      render json: {status: false, message: "Error happen during logging out"}, status: unprocessable_entity
+      render json: {status: false, message: "Error happen during logging out"}, status: 422
     end
   end
 
@@ -43,7 +43,7 @@ class Api::V1::UsersController < Api::V1::ApplicationController
     if @user.destroy
       render json: {status: true}
     else
-      render json: @user.errors, status: unprocessable_entity
+      render json: @user.errors, status: 422
     end
   end
 
